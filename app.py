@@ -26,7 +26,7 @@ def create_app():
         if data.get("title") is None or data.get("desc") is None or data.get("prio") is None:
             return "Invalid message", 400
 
-        if data.get("prio") < 0 or data.get("prio") > 3:
+        if int(data.get("prio")) < 0 or int(data.get("prio")) > 2:
             return "Invalid priority", 400
 
         response = create_Response(data)
