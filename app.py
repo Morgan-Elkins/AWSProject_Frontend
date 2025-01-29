@@ -18,37 +18,40 @@ def create_app():
     @app.post("/")
     def send_data_to_SQS():
         data = request.json
-        #
-        # if data.title == None or data.desc == None or data.prio == None:
-        #     return "Invalid message", 400
+
+        print(data.get("title"), type(data.get("title")))
+
+        if data.get("title") is None or data.get("desc") is None or data.get("prio") is None:
+            return "Invalid message", 400
+
+        if data.get("prio") < 0 or data.get("prio") > 3:
+            return "Invalid priority", 400
 
         response = create_Response(data)
         # print(response)
         return response, 200
 
-
     return app
 
 def create_Response(data):
-    # if data.prio < 0 or data.prio > 3:
-    #     return "Invalid priority"
-    print(AWS_QUEUES[0])
+    priority = data.get("prio")
+    print(AWS_QUEUES[priority])
     message_body = {
-        'Title': {
+        'title': {
             'DataType': 'String',
-            'StringValue': 'Test Title'
+            'StringValue': f'{data.get("title")}'
         },
-        'Desc': {
+        'desc': {
             'DataType': 'String',
-            'StringValue': 'Test Desc'
+            'StringValue': f'{data.get("desc")}'
         },
-        'Prio': {
+        'prio': {
             'DataType': 'Number',
-            'StringValue': '0'
+            'StringValue': f'{data.get("prio")}'
         }
     }
     return sqs.send_message(
-        QueueUrl=AWS_QUEUES[0],
+        QueueUrl=AWS_QUEUES[priority],
         MessageBody=(
             str(message_body)
         )
