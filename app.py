@@ -30,13 +30,12 @@ def create_app():
             return "Invalid priority", 400
 
         response = create_Response(data)
-        # print(response)
         return response, 200
 
     return app
 
 def create_Response(data):
-    priority = data.get("prio")
+    priority = int(data.get("prio"))
     print(AWS_QUEUES[priority])
     message_body =\
         {
