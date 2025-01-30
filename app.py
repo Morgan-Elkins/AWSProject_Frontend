@@ -14,14 +14,21 @@ def create_app():
     app = Flask(__name__)
     @app.route("/")
     def home():
-        # print(f"{AWS_REGION} {AWS_QUEUES[0]}")
-        return render_template('index.html')
+        return render_template('index.html'), 200
+
+    # http://localhost:5000/health
+    @app.route("/health", methods=["GET"])
+    def health():
+        return "Healthy", 200
 
     @app.post("/")
     def send_data_to_SQS():
-        data = request.json
+        try:
+            data = request.json
+        except:
+            return "Invalid data format",400
 
-        print(data.get("title"), type(data.get("title")))
+        # print(data.get("title"), type(data.get("title")))
 
         if data.get("title") is None or data.get("desc") is None or data.get("prio") is None:
             return "Invalid message", 400
@@ -36,12 +43,12 @@ def create_app():
 
 def create_Response(data):
     priority = int(data.get("prio"))
-    print(AWS_QUEUES[priority])
+    # print(AWS_QUEUES[priority])
     message_body =\
         {
             'title': f"{data.get("title")}",
             'desc': f"{data.get("desc")}",
-            'prio': int(data.get("prio")),
+            'prio': priority,
         }
     return sqs.send_message(
         QueueUrl=AWS_QUEUES[priority],
