@@ -1,13 +1,12 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import boto3
 
 load_dotenv()
 
 AWS_REGION = os.getenv("AWS_REGION")
 AWS_QUEUES = [os.getenv("AWS_Q1"), os.getenv("AWS_Q2"), os.getenv("AWS_Q3")]
-
 sqs = boto3.client('sqs', region_name=AWS_REGION)
 
 def create_app():
@@ -19,7 +18,7 @@ def create_app():
     # http://localhost:5000/health
     @app.route("/health", methods=["GET"])
     def health():
-        return "Healthy", 200
+        return jsonify({"status":"Healthy"}), 200
 
     @app.post("/")
     def send_data_to_SQS():
