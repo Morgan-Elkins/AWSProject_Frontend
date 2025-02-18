@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify
-from flask_cors import CORS
 import boto3
 
 load_dotenv()
@@ -14,8 +13,6 @@ PORT = os.getenv("PORT") if os.getenv("PORT") is not None else 5000
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, origins="*")
-    print(PORT, )
     @app.route("/")
     def home():
         return render_template('index.html', PORT=PORT), 200
