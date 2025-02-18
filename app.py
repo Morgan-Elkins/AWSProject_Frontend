@@ -35,18 +35,17 @@ def create_app():
         if int(data.get("prio")) < 0 or int(data.get("prio")) > 2:
             return "Invalid priority", 400
 
-        response = create_Response(data)
+        response = create_response(data)
         return response, 200
 
     return app
 
-def create_Response(data):
+def create_response(data):
     priority = int(data.get("prio"))
     # print(AWS_QUEUES[priority])
-    message_body =\
-        {
-            'title': f"{data.get("title")}",
-            'desc': f"{data.get("desc")}",
+    message_body = {
+            'title': f"{data.get('title')}",
+            'desc': f"{data.get('desc')}",
             'prio': priority,
         }
     return sqs.send_message(
@@ -59,3 +58,5 @@ def create_Response(data):
 if __name__ == '__main__':
     app = create_app()
     app.run()
+else:
+    app = create_app()
