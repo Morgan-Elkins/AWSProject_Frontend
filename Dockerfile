@@ -6,6 +6,9 @@ RUN pip install -r requirements.txt
 COPY . .
 CMD ["gunicorn", "--config", "gunicorn_config.py", "app:app"]
 
+ENV PORT=8080
+ENV PYTHONUNBUFFERED=1
+
 ENV AWS_REGION=""
 ENV AWS_Q1=""
 ENV AWS_Q2=""
