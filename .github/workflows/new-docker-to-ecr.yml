@@ -1,4 +1,4 @@
-name: Docker Push
+name: New Docker Push to ECR
 on: 
   push: 
     branches: [ "master" ]
