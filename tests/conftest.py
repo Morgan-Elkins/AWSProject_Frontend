@@ -1,16 +1,33 @@
+import os
 import pytest
 from flask import jsonify
+import boto3
+from moto import mock_aws
 
 from app import create_app
 
-@pytest.fixture()
-def app():
-    app = create_app()
-    app.config.update({
-        "TESTING": True,
-    })
+@pytest.fixture(scope='function')
+def aws_credentials():
+    """Mocked AWS Credentials for moto."""
+    os.environ['AWS_REGION'] = 'eu-west-2'
+    os.environ['AWS_Q1'] = 'testing'
+    os.environ['AWS_Q2'] = 'testing'
+    os.environ['AWS_Q3'] = 'testing'
+    os.environ['AWS_ACCESS_KEY_ID'] = 'testing'
+    os.environ['AWS_SECRET_ACCESS_KEY'] = 'testing'
 
-    yield app
+@pytest.fixture(scope='function')
+def app(aws_credentials):
+    
+    with mock_aws():
+        boto3.client('sqs', region_name='eu-west-2')
+    
+        app = create_app()
+        app.config.update({
+            "TESTING": True,
+        })
+
+        yield app
 
 
 @pytest.fixture()
@@ -41,7 +58,7 @@ def test_post_invalid_prio(client):
     response = client.post("/", json=data)
     assert response.data == b'Invalid priority'
 
-# def test_post_valid(client):
-#     data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
-#     response = client.post("/", json=data)
-#     assert response.status_code == 200
+def test_post_valid(client):
+    data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
+    response = client.post("/", json=data)
+    assert response.status_code == 200
