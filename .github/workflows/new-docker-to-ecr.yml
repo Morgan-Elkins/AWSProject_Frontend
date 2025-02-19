@@ -36,4 +36,4 @@ jobs:
             IMAGE_TAG: frontend-flask-app
           run: |
             docker build -t $ECR_REPOSITORY_URI:$IMAGE_TAG .
-            docker push $EECR_REPOSITORY_URI:$IMAGE_TAG
+            docker push $ECR_REPOSITORY_URI:$IMAGE_TAG
