@@ -6,7 +6,7 @@ from moto import mock_aws
 
 from app import create_app
 
-@pytest.fixture(scope='function')
+# @pytest.fixture(scope='function')
 def aws_credentials():
     """Mocked AWS Credentials for moto."""
     os.environ['AWS_REGION'] = 'eu-west-2'
@@ -17,7 +17,8 @@ def aws_credentials():
     os.environ['AWS_SECRET_ACCESS_KEY'] = 'testing'
 
 @pytest.fixture(scope='function')
-def app(aws_credentials):
+def app():
+    aws_credentials()
     
     with mock_aws():
         boto3.client('sqs', region_name='eu-west-2')
