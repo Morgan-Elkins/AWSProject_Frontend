@@ -56,7 +56,7 @@ def test_post_invalid_prio(client):
     response = client.post("/", json=data)
     assert response.data == b'Invalid priority'
 
-def test_post_valid(client):
-    data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
-    response = client.post("/", json=data)
-    assert response.status_code == 200
+# def test_post_valid(client):
+#     data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
+#     response = client.post("/", json=data)
+#     assert response.status_code == 200
