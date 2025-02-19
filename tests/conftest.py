@@ -4,6 +4,13 @@ from flask import jsonify
 import boto3
 from moto import mock_aws
 
+os.environ['AWS_REGION'] = 'eu-west-2'
+os.environ['AWS_Q1'] = 'testing'
+os.environ['AWS_Q2'] = 'testing'
+os.environ['AWS_Q3'] = 'testing'
+os.environ['AWS_ACCESS_KEY_ID'] = 'testing'
+os.environ['AWS_SECRET_ACCESS_KEY'] = 'testing'
+
 from app import create_app
 
 # @pytest.fixture(scope='function')
@@ -18,7 +25,7 @@ def aws_credentials():
 
 @pytest.fixture(scope='function')
 def app():
-    aws_credentials()
+    # aws_credentials()
     
     with mock_aws():
         boto3.client('sqs', region_name='eu-west-2')
