@@ -11,43 +11,41 @@ sqs = boto3.client('sqs', region_name=AWS_REGION)
 
 PORT = os.getenv("PORT") if os.getenv("PORT") is not None else 5000
 
-def create_app():
-    app = Flask(__name__)
-    @app.route("/")
-    def home():
-        return render_template('index.html', PORT=PORT), 200
+app = Flask(__name__)
 
-    # http://localhost:5000/health
-    @app.route("/health", methods=["GET"])
-    def health():
-        return jsonify({"status":"Healthy"}), 200
+@app.route("/")
+def home():
+    return render_template('index.html', PORT=PORT), 200
 
-    @app.post("/")
-    def send_data_to_SQS():
-        try:
-            data = request.json
-        except Exception as e:
-            return "Invalid data format",400, e
+# http://localhost:5000/health
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status":"Healthy"}), 200
 
-        # print(data.get("title"), type(data.get("title")))
+@app.post("/")
+def send_data_to_SQS():
+    try:
+        data = request.json
+    except Exception as e:
+        return "Invalid data format",400, e
 
-        if data.get("title") is None or data.get("desc") is None or data.get("prio") is None:
-            return "Invalid message", 400
+    # print(data.get("title"), type(data.get("title")))
 
-        if data.get("title") == "" or data.get("desc") == "" or data.get("prio") == "":
-            return "Invalid message", 400
+    if data.get("title") is None or data.get("desc") is None or data.get("prio") is None:
+        return "Invalid message", 400
 
-        if int(data.get("prio")) < 0 or int(data.get("prio")) > 2:
-            return "Invalid priority", 400
+    if data.get("title") == "" or data.get("desc") == "" or data.get("prio") == "":
+        return "Invalid message", 400
 
-        response = create_response(data)
-        return response, 200
+    if int(data.get("prio")) < 0 or int(data.get("prio")) > 2:
+        return "Invalid priority", 400
 
-    return app
+    response = create_response(data)
+    return response, 200
+
 
 def create_response(data):
     priority = int(data.get("prio"))
-    # print(AWS_QUEUES[priority])
     message_body = {
             'title': f"{data.get('title')}",
             'desc': f"{data.get('desc')}",
@@ -62,7 +60,4 @@ def create_response(data):
 
 #Docker: docker run --env-file ./.env -p 8080:8080 front-end-flask-app
 if __name__ == '__main__':
-    app = create_app()
     app.run()
-else:
-    app = create_app()
