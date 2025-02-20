@@ -25,9 +25,9 @@ def app():
             "TESTING": True,
         })
 
-        queue_name = "test"
+        queue_name = "testing"
         queue_url = sqs.create_queue(
-            QueueName='test'
+            QueueName='testing'
         )['QueueUrl']
 
         yield app
@@ -61,9 +61,9 @@ def test_post_invalid_prio(client):
     response = client.post("/", json=data)
     assert response.data == b'Invalid priority'
 
-# @mock_aws
-# def test_post_valid(client):
-#     with mock_aws():
-#         data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
-#         response = client.post("/", json=data)
-#         assert response.status_code == 200
+@mock_aws
+def test_post_valid(client):
+    with mock_aws():
+        data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
+        response = client.post("/", json=data)
+        assert response.status_code == 200

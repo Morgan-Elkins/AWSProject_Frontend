@@ -60,8 +60,7 @@ def create_response(data):
         )
     )
 
-
-#Docker run docker run --env-file ./.env -p 8080:8080 front-end-flask-app
+#Docker: docker run --env-file ./.env -p 8080:8080 front-end-flask-app
 if __name__ == '__main__':
     app = create_app()
     app.run()
