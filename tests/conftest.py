@@ -18,12 +18,17 @@ from app import create_app
 def app():
     
     with mock_aws():
-        boto3.client('sqs', region_name='eu-west-2')
+        sqs = boto3.client('sqs', region_name='eu-west-2')
     
         app = create_app()
         app.config.update({
             "TESTING": True,
         })
+
+        queue_name = "test"
+        queue_url = sqs.create_queue(
+            QueueName='test'
+        )['QueueUrl']
 
         yield app
 
@@ -56,7 +61,9 @@ def test_post_invalid_prio(client):
     response = client.post("/", json=data)
     assert response.data == b'Invalid priority'
 
+# @mock_aws
 # def test_post_valid(client):
-#     data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
-#     response = client.post("/", json=data)
-#     assert response.status_code == 200
+#     with mock_aws():
+#         data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
+#         response = client.post("/", json=data)
+#         assert response.status_code == 200
