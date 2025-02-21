@@ -45,7 +45,6 @@ def test_post_invalid_prio(client):
 
 @mock_aws
 def test_post_valid(client):
-    with mock_aws():
-        data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
-        response = app.test_client().post("/", json=data)
-        assert response.status_code == 200
+    data = {"title": "pytest", "desc": "pytest desc", "prio": 0}
+    response = app.test_client().post("/", json=data)
+    assert response.status_code == 200
