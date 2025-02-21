@@ -1,6 +1,5 @@
 import os
 import pytest
-from flask import jsonify
 import boto3
 from moto import mock_aws
 
@@ -20,7 +19,6 @@ def client():
     with mock_aws():
         sqs = boto3.client('sqs', region_name='eu-west-2')
 
-        queue_name = "testing"
         queue_url = sqs.create_queue(
             QueueName='testing'
         )['QueueUrl']
