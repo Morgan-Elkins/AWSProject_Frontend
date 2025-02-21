@@ -13,7 +13,7 @@ PORT = os.getenv("PORT") if os.getenv("PORT") is not None else 5000
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
     return render_template('index.html', PORT=PORT), 200
 
