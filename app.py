@@ -16,7 +16,10 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def home():
-    return render_template('index.html', PORT=PORT, BASE_URL=base_url), 200
+    if base_url == "http://localhost":
+        return render_template('index.html', PORT=PORT, BASE_URL=base_url), 200
+    else:
+        return render_template('index.html', PORT="", BASE_URL=base_url), 200
 
 # http://localhost:5000/health
 @app.route("/health", methods=["GET"])
