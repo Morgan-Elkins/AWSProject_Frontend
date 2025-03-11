@@ -10,12 +10,13 @@ AWS_QUEUES = [os.getenv("AWS_Q1"), os.getenv("AWS_Q2"), os.getenv("AWS_Q3")]
 sqs = boto3.client('sqs', region_name=AWS_REGION)
 
 PORT = os.getenv("PORT") if os.getenv("PORT") is not None else 5000
+base_url = os.getenv("BASE_URL") # Do that
 
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def home():
-    return render_template('index.html', PORT=PORT), 200
+    return render_template('index.html', PORT=PORT, BASE_URL=base_url), 200
 
 # http://localhost:5000/health
 @app.route("/health", methods=["GET"])
