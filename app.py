@@ -55,6 +55,7 @@ def create_response(data):
             'desc': f"{data.get('desc')}",
             'prio': priority,
         }
+    print(AWS_QUEUES[priority])
     return sqs.send_message(
         QueueUrl=AWS_QUEUES[priority],
         MessageBody=(
